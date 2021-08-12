@@ -1,47 +1,161 @@
+import java.util.Random;
+import java.util.Scanner;
+
 public class HomeWorkApp {
+
+    public static final char DOT_EMPTY = '.';
+    public static final char DOT_X = 'X';
+    public static final char DOT_O = 'O';
+    public static char [] [] map;
+    public static final int SIZE = 3;
+    public static final int WinnerSize = 3;
+
     public static void main(String[] args) {
-
-        printThreeWords();
-        checkSumSign();
-        printColor();
-        compareNumbers();
-    }
-
-    public static void printThreeWords() {
-        System.out.println("Orange\nBanana\nApple");
-    }
-
-    public static void checkSumSign() {
-        int a = 7;
-        int b = 21;
-        int c = a +b;
-        if (c >= 0) {
-            System.out.println("Сумма положительная");
-        } else {
-            System.out.println("Сумма отрицательная");
-        }
-
-    }
-
-    public static void printColor() {
-        int value = 5;
-        if (value <= 0) {
-            System.out.println("Красный");
-        } else if (value > 0 && value <= 100) {
-            System.out.println("Желтый");
-        } else {
-            System.out.println("Зеленый");
+initMap();
+printMap();
+        while (true) {
+            humanTurn();
+            printMap();
+            if (isWinner(DOT_X) || DiagonalWin(DOT_X)){
+                System.out.println("Вы выиграли!");
+                break;
+            }
+            if (isMapFull()){
+                System.out.println("Ничья");
+                break;
+            }
+            AITurn();
+            printMap();
+            if (isWinner(DOT_O) || DiagonalWin(DOT_O)){
+                System.out.println("Выиграл компьютер!");
+                break;
+            }
+            if (isMapFull()){
+                System.out.println("Ничья");
+                break;
+            }
         }
     }
 
-    public static void compareNumbers() {
-        int a = 8;
-        int b = 31;
-        if (a >= b) {
-            System.out.println("a>=b");
-        }
-        else {
-            System.out.println("a<b");
+    public static void initMap() {
+        map = new char[SIZE][SIZE];
+        for (int i = 0; i < SIZE; i++){
+            for (int j = 0; j < SIZE; j++){
+                map [i][j] = DOT_EMPTY;
+            }
         }
     }
+
+    public static void printMap() {
+        for (int i = 0; i <= SIZE; i++){
+            System.out.print(i + " ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < SIZE; i++){
+            System.out.print((i + 1) + " ");
+            for (int j = 0; j < SIZE; j++) {
+                System.out.print(map[i][j] + " ");
+            }
+        System.out.println();
+        }
+    }
+    public static void humanTurn (){
+        int x;
+        int y;
+        System.out.println("Введите ячейку в формате X и Y");
+        Scanner scanner = new Scanner(System.in);
+        do {x = scanner.nextInt() - 1;
+            y = scanner.nextInt() - 1;
+        } while (!isCellValid(x,y));
+
+
+        map [y][x] = DOT_X;
+    }
+
+    public static void AITurn (){
+        int x;
+        int y;
+
+        Random random = new Random();
+
+        do {x = random.nextInt(SIZE);
+            y = random.nextInt(SIZE);
+        } while (!isCellValid(x,y));
+
+        System.out.println("Компьютер сделал ход " + (x+1) + " " + (y+1));
+        map [y][x] = DOT_O;
+    }
+
+    public static boolean isCellValid (int x, int y){
+        if (x<0 || x >= SIZE || y<0 || y >= SIZE){
+            return false;
+        }
+
+        if (map [y][x] == DOT_EMPTY) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isWinner (char symb) {
+        for (int i = 0; i < WinnerSize; i++) {
+            int horizontalWinCounter = 0;
+            int verticalWinCounter = 0;
+
+            for (int j = 0; j < WinnerSize; j++) {
+                if (map[i][j] == symb) {
+                    horizontalWinCounter++;
+                } else {
+                    horizontalWinCounter = 0;
+                }
+                if (map [j][i] == symb) {
+                    verticalWinCounter++;
+                }
+                else {
+                    verticalWinCounter = 0;
+                }
+            }
+            if (horizontalWinCounter == WinnerSize || verticalWinCounter == WinnerSize){
+                return true;
+            }
+
+        }
+        return false;
+    }
+    public static boolean DiagonalWin (char symb) {
+        int mainDiagonalCounter = 0;
+        int sideDiagonalCounter = 0;
+
+        for (int i = 0; i<SIZE; i++){
+            if (map [i][i] == symb){
+                mainDiagonalCounter++;
+            }
+            else {
+                mainDiagonalCounter = 0;
+            }
+            if (map [i][map.length - 1 - i] == symb){
+                sideDiagonalCounter++;
+            }
+            else {
+                sideDiagonalCounter = 0;
+            }
+        }
+        if (mainDiagonalCounter == WinnerSize || sideDiagonalCounter == WinnerSize){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isMapFull (){
+        for (int i = 0; i < SIZE; i++){
+            for (int j = 0; j < SIZE; j++){
+                if (map [i][j] == DOT_EMPTY) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
