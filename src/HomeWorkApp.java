@@ -1,47 +1,20 @@
 public class HomeWorkApp {
     public static void main(String[] args) {
 
-        printThreeWords();
-        checkSumSign();
-        printColor();
-        compareNumbers();
-    }
+        Cat [] group = {
+                new Cat ("Фима", 15),
+                new Cat ("Люся", 5),
+                new Cat ("Барсик", 20),
+                new Cat("Мурка", 5),
+        };
+    Plate plate1 = new Plate(30);
 
-    public static void printThreeWords() {
-        System.out.println("Orange\nBanana\nApple");
+    for (Cat cat : group){
+        cat.eat(plate1);
     }
-
-    public static void checkSumSign() {
-        int a = 7;
-        int b = 21;
-        int c = a +b;
-        if (c >= 0) {
-            System.out.println("Сумма положительная");
-        } else {
-            System.out.println("Сумма отрицательная");
-        }
+    plate1.AddFood(50);
 
     }
 
-    public static void printColor() {
-        int value = 5;
-        if (value <= 0) {
-            System.out.println("Красный");
-        } else if (value > 0 && value <= 100) {
-            System.out.println("Желтый");
-        } else {
-            System.out.println("Зеленый");
-        }
-    }
 
-    public static void compareNumbers() {
-        int a = 8;
-        int b = 31;
-        if (a >= b) {
-            System.out.println("a>=b");
-        }
-        else {
-            System.out.println("a<b");
-        }
-    }
 }
